@@ -1,7 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\TurnosController;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [TurnosController::class, 'index']);
+
+Route::get('/turno/{tipo}', [TurnosController::class, 'GenerarTurno']);
