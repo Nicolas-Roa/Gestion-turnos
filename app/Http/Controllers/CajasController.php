@@ -4,62 +4,52 @@ namespace App\Http\Controllers;
 
 use App\Models\Cajas;
 use Illuminate\Http\Request;
+use App\Models\Turnos;
 
 class CajasController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function AsignarTurno($caja)
     {
-        //
+        $turno = Turnos::where('caja', '=', $caja)->where('estado', '=', 1)->get();
+
+        if (count($turno) > 0) {
+            return redirect("/caja/tomar/{$caja}/{$turno[0]->id}");
+        }
+
+        $turnos = Turnos::whereNull('caja')->get();
+
+        return view('cajas.asignar', [
+            'turnos' => $turnos,
+            'caja' => $caja
+        ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function TomarTurno($caja, $turno)
     {
-        //
+        $turno = Turnos::find($turno);
+        $turno->caja = $caja;
+        if ($turno->save()) {
+            return view('cajas.gestion', [
+                'caja' => $caja,
+                'turno' => $turno,
+            ]);
+        }
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function Cajas()
     {
-        //
+        $cajasM = Cajas::where('estado', '=', 1)->get();
+        return view('cajas.view', [
+            'cajas' => $cajasM,
+        ]);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Cajas $cajas)
+    public function ActualizarTurno($caja, $turno)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Cajas $cajas)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Cajas $cajas)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Cajas $cajas)
-    {
-        //
+        $turno = Turnos::find($turno);
+        $turno->estado = 2;
+        if ($turno->save()) {
+            return redirect('/caja/' . $caja);
+        }
     }
 }

@@ -11,9 +11,23 @@ class TurnosController extends Controller
     /**
      * Autor:Nicolas Roa
      * Fecha:2024-05-25
+     * Descripcion: Mostrar el turno y su caja correspondiente
+     */
+    public function Turnos()
+    {
+        $turnos = Turnos::whereNotNull('caja')->where('estado', '=', 1)->orderBy('numero', 'desc')->get();
+
+        return view('turno.turnos', [
+            'turnos' => $turnos
+        ]);
+    }
+
+    /**
+     * Autor:Nicolas Roa
+     * Fecha:2024-05-25
      * Descripcion: mostrar las opcines de los turno
      */
-    public function index()
+    public function Seleccion()
     {
         $tipos = Tipo::where('estado', '=', 1)->get();
         return view('turno.opciones', [
@@ -24,7 +38,8 @@ class TurnosController extends Controller
     /**
      * Autor:Nicolas Roa
      * Fecha:2024-05-25
-     * Descripcion: Generar el turno para la persona
+     * Descripcion: Generar el turno para la person
+     * @param int $tipo Tipo del turno
      */
     public function GenerarTurno($tipo)
     {
@@ -37,45 +52,5 @@ class TurnosController extends Controller
                 'turno' => $turnoM,
             ]);
         }
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Turnos $turnos)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Turnos $turnos)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Turnos $turnos)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Turnos $turnos)
-    {
-        //
     }
 }

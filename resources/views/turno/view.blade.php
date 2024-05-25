@@ -19,7 +19,7 @@
     <script type="text/javascript" defer>
         $(function() {
             setTimeout(() => {
-                window.location = '/';
+                window.location = '/turno';
             }, 5000);
         });
     </script>
